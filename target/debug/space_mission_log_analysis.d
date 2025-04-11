@@ -1,0 +1,1 @@
+/Users/bruno/Programming/rust/mission-log/target/debug/space_mission_log_analysis: /Users/bruno/Programming/rust/mission-log/src/analyzer/mod.rs /Users/bruno/Programming/rust/mission-log/src/cli/mod.rs /Users/bruno/Programming/rust/mission-log/src/main.rs /Users/bruno/Programming/rust/mission-log/src/parser/mod.rs

@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install dependencies
+        run: cargo fetch
+
+      - name: Build
+        run: cargo build --verbose
+
+      - name: Check format
+        run: cargo fmt -- --check
+
+      - name: Lint
+        run: cargo clippy -- -D warnings
+
+      - name: Unit tests
+        run: cargo test --lib
+
+      - name: Integration tests
+        run: cargo test --test integration_test
