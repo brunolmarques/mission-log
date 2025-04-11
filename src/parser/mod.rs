@@ -28,11 +28,16 @@ impl Mission {
         }
 
         let destination = line_split[2].trim().to_string();
+        debug!("Parsed destination: {}", destination);
         let status = line_split[3].trim().to_string();
+        debug!("Parsed status: {}", status);
         let duration_str = line_split[5].trim();
+        debug!("Parsed duration string: {}", duration_str);
         let security_code = line_split[7].trim().to_string();
+        debug!("Parsed security code: {}", security_code);
 
         // Parse duration
+        debug!("Parsing duration: {}", duration_str);
         let duration = duration_str.parse::<u64>().ok()?;
 
         Some(Mission {

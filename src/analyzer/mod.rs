@@ -5,14 +5,14 @@ use rayon::prelude::*;
 use std::fs;
 
 use crate::parser::{Mission, parse_line};
-use log::{info, warn};
+use log::{debug, info, warn};
 
 /// Reads the file at `file_path`, parses each line, and returns the security code
 /// of the longest successful Mars mission.
 ///
 /// # Errors
 /// Returns an error if the file cannot be read or if no valid mission is found.
-pub fn find_longest_successful_mars_mission(file_path: &str) -> Result<String, String> {
+pub fn find_longest_successful_mars_mission(file_path: &str) -> Result<Vec<Mission>, String> {
     info!("Reading file: {}", file_path);
 
     let content = fs::read_to_string(file_path).map_err(|e| format!("Failed to read file: {e}"))?;
@@ -30,13 +30,22 @@ pub fn find_longest_successful_mars_mission(file_path: &str) -> Result<String, S
         return Err("No successful Mars missions found in the file.".into());
     }
 
-    // Find mission with the longest duration
-    let longest_mission = missions
-        .into_iter()
-        .max_by_key(|m| m.duration)
-        .expect("missions vector should not be empty");
+    // Determine the maximum duration out of all missions.
+    // Since we already know `missions` is non-empty, `max()` is safe to unwrap.
+    info!(
+        "Found {} successful Mars missions, searching for the longest...",
+        missions.len()
+    );
+    debug!("Missions: {:?}", missions);
+    let max_duration = missions.iter().map(|m| m.duration).max().unwrap();
 
-    Ok(longest_mission.security_code)
+    // Collect all missions that share this maximum duration.
+    let longest_missions: Vec<Mission> = missions
+        .into_iter()
+        .filter(|m| m.duration == max_duration)
+        .collect();
+
+    Ok(longest_missions)
 }
 
 //---------------------------------------------------Tests---------------------------------------------------
@@ -62,7 +71,7 @@ mod tests {
     fn test_find_longest_successful_mars_mission_ok() {
         let input = "\
         # comment\n\
-        2045-07-12 | KLM-1234 | Mars  | Completed | 5 | 100 | 98.7 | CODE-ABC\n\
+        2045-07-12 | KLM-1234 | Mars  | Completed | 5 | 200 | 98.7 | CODE-ABC\n\
         2046-07-12 | XYZ-9999 | Mars  | Completed | 5 | 200 | 99.0 | BIGGER-999\n\
         2047-01-01 | ABC-7777 | Venus | Completed | 3 |  10 | 90.0 | IGNORE-ME\n\
         ";
@@ -70,7 +79,11 @@ mod tests {
         std::fs::write(tmp_file, input).unwrap();
 
         let result = find_longest_successful_mars_mission(tmp_file).unwrap();
-        assert_eq!(result, "BIGGER-999");
+        // Since both valid Mars missions have the same duration, we expect both to be returned.
+        assert_eq!(result.len(), 2);
+        let security_codes: Vec<_> = result.iter().map(|m| m.security_code.as_str()).collect();
+        assert!(security_codes.contains(&"CODE-ABC"));
+        assert!(security_codes.contains(&"BIGGER-999"));
 
         std::fs::remove_file(tmp_file).unwrap();
     }

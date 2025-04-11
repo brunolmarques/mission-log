@@ -59,6 +59,10 @@ space_mission_log_analysis/
     ```bash
     make lint
     ```
+- **Running from terminal**:
+    ```bash
+    cargo run -- --file ./space_missions.log
+    ```
 
 ## CI Explanation
 - The GitHub Actions workflow (`.github/workflows/ci.yml`) checks out the repository, sets up Rust, and runs a **build**, **format check**, **lint** check, **unit tests**, and **integration tests**. 
