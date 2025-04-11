@@ -60,10 +60,7 @@ pub fn parse_line(line: &str) -> Option<Mission> {
     Mission::from_line_split(&parts)
 }
 
-
 //---------------------------------------------------Tests---------------------------------------------------
-
-
 
 #[cfg(test)]
 mod tests {

@@ -30,7 +30,7 @@ jobs:
         run: cargo clippy -- -D warnings
 
       - name: Unit tests
-        run: cargo test --lib
+        run: cargo test
 
       - name: Integration tests
-        run: cargo test --test integration_test
+        run: cargo test --test integration

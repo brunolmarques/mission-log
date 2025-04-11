@@ -1,10 +1,10 @@
 //! Contains logic to find the longest successful Mars mission.
 //! Uses Rayon for parallel processing of large files.
 
-use std::fs;
 use rayon::prelude::*;
+use std::fs;
 
-use crate::parser::{parse_line, Mission};
+use crate::parser::{Mission, parse_line};
 use log::{info, warn};
 
 /// Reads the file at `file_path`, parses each line, and returns the security code
@@ -21,7 +21,7 @@ pub fn find_longest_successful_mars_mission(file_path: &str) -> Result<String, S
     // Process lines in parallel using rayon
     let missions: Vec<Mission> = content
         .par_lines()
-        .filter_map(|line| parse_line(line))
+        .filter_map(parse_line)
         .filter(|m| m.status.eq("Completed") && m.destination.eq("Mars"))
         .collect();
 
@@ -39,9 +39,7 @@ pub fn find_longest_successful_mars_mission(file_path: &str) -> Result<String, S
     Ok(longest_mission.security_code)
 }
 
-
 //---------------------------------------------------Tests---------------------------------------------------
-
 
 #[cfg(test)]
 mod tests {
@@ -60,7 +58,6 @@ mod tests {
         std::fs::remove_file(tmp_file).unwrap();
     }
 
-    
     #[test]
     fn test_find_longest_successful_mars_mission_ok() {
         let input = "\

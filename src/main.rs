@@ -1,12 +1,11 @@
 //! Main entry point of the application.
 //! High-level coordinator for CLI argument handling and log analysis.
 
-use env_logger;
 use log::info;
 
+mod analyzer;
 mod cli;
 mod parser;
-mod analyzer;
 
 fn main() {
     // Initialize the logger for better debugging/tracing
