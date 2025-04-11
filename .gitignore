@@ -24,3 +24,7 @@ coverage/
 # Temporary files
 *.log
 *.tmp
+
+# Ignore additional Rust build directories
+/target-*/      # catch any folder starting with "target-" (e.g. target-debug, target-release)
+/build/         # custom build directory (if using CARGO_TARGET_DIR)
