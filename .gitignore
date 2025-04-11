@@ -1,0 +1,26 @@
+# Binaries and build artifacts
+/target/
+**/*.rs.bk
+
+# If you choose to ignore Cargo.lock (common for libraries, not binaries):
+# Cargo.lock
+
+# IntelliJ / CLion / Rider project files
+.idea/
+*.iml
+
+# Visual Studio Code settings
+.vscode/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# By-products of testing or coverage tools
+coverage/
+*.profraw
+*.profdata
+
+# Temporary files
+*.log
+*.tmp
